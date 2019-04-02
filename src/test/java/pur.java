@@ -3,6 +3,7 @@
  */
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,21 +17,23 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.apache.commons.io.FileUtils;
 
 
-import java.io.File;
+import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+
 
 import static java.lang.System.getProperty;
 
 public class pur {
     WebDriver driver ;
-
+    long start;
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
     @Before
     public void beforeTest() {
 
         System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
+
 
         driver = new ChromeDriver();
         //uncomment this if u using safari on mac and comment the above code = driver = new ChromeDriver();
@@ -95,5 +98,67 @@ public class pur {
         FileUtils.copyFile(SrcFile, DestFile);
 
     }
+
+
+    @After
+    public void afterTest(){
+
+
+    try {
+        //define a HTML String Builder
+        StringBuilder htmlStringBuilder=new StringBuilder();
+        //append html header and title
+        htmlStringBuilder.append("<html><head><title>Selenium Test </title></head>");
+
+        htmlStringBuilder.append("<center><h1>Automation Results </h1></br></br>");
+        //append body
+        htmlStringBuilder.append("<body>");
+        //append table
+        htmlStringBuilder.append("<table border=\"1\" bordercolor=\"#000000\">");
+        //append row
+        htmlStringBuilder.append("<tr><td><b>TestId</b></td><td><b>TestName</b></td><td><b>Status</b></td></tr>");
+        //append row
+        htmlStringBuilder.append("<tr><td>001</td><td>Screen Verifications</td><td>Passed</td></tr>");
+        //append row
+        //htmlStringBuilder.append("<tr><td>002</td><td>Logout</td><td>Passed</td></tr>");
+        //close html file
+        htmlStringBuilder.append("</table></br>");
+
+        htmlStringBuilder.append("<img src='d://pie.png' alt='image' />");
+        htmlStringBuilder.append("</body></center></html>");
+
+
+        //write html string content to a file
+        WriteToFile(htmlStringBuilder.toString(),"testfile.html");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+    public static void WriteToFile(String fileContent, String fileName) throws IOException {
+        String projectPath = System.getProperty("user.dir");
+        String tempFile = projectPath + File.separator+fileName;
+        File file = new File(tempFile);
+        // if file does exists, then delete and create a new file
+        if (file.exists()) {
+            try {
+                File newFileName = new File(projectPath + File.separator+ "backup_"+fileName);
+                file.renameTo(newFileName);
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //write to file with OutputStreamWriter
+        OutputStream outputStream = new FileOutputStream(file.getAbsoluteFile());
+        Writer writer=new OutputStreamWriter(outputStream);
+        writer.write(fileContent);
+        writer.close();
+
+         //start time
+        long endTime;   //end time
+        double time;
+
+    }
+
 
 }
