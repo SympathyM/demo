@@ -3,6 +3,9 @@
  */
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+
+
+import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +18,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.apache.commons.io.FileUtils;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 
 import java.io.*;
@@ -26,7 +31,11 @@ import static java.lang.System.getProperty;
 
 public class pur {
     WebDriver driver ;
-    long start;
+   static long startTime=System.currentTimeMillis();
+    static long end;
+
+
+
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
     @Before
@@ -46,6 +55,8 @@ public class pur {
 
     public void testHeaderFooterLinks () throws Exception
     {
+
+       // long start = System.currentTimeMillis();
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         WebDriverWait wait = new WebDriverWait(driver, 20);
@@ -82,6 +93,17 @@ public class pur {
         // a new addded
         driver.quit();
 
+
+
+
+      /*  long end  = System.currentTimeMillis();
+        double dur=(double) (end-start)/1000;
+        int duration= (int) dur;
+
+        System.out.println(duration+ " s");
+        System.out.println(dur);
+        System.out.println(end);  */
+
     }
 
     public static void takeSnapShot(WebDriver webdriver,String fileWithPath) throws Exception{
@@ -101,8 +123,7 @@ public class pur {
 
 
     @After
-    public void afterTest(){
-
+    public  void afterTest(){
 
     try {
         //define a HTML String Builder
@@ -116,20 +137,28 @@ public class pur {
         //append table
         htmlStringBuilder.append("<table border=\"1\" bordercolor=\"#000000\">");
         //append row
-        htmlStringBuilder.append("<tr><td><b>TestId</b></td><td><b>TestName</b></td><td><b>Status</b></td></tr>");
+        htmlStringBuilder.append("<tr><td><b>TestId</b></td><td><b>TestName</b></td><td><b>Status<td><b>Execution Time</b></td></tr>");
         //append row
-        htmlStringBuilder.append("<tr><td>001</td><td>Screen Verifications</td><td>Passed</td></tr>");
+
+        end  = System.currentTimeMillis();
+        double dur=(double) (end-startTime)/1000;
+        int duration= (int) dur;
+
+        htmlStringBuilder.append("<tr><td>001</td><td>Screen Verifications</td><td>Passed<td><b>"+duration+"</td></tr>");
         //append row
         //htmlStringBuilder.append("<tr><td>002</td><td>Logout</td><td>Passed</td></tr>");
         //close html file
         htmlStringBuilder.append("</table></br>");
-
         htmlStringBuilder.append("<img src='d://pie.png' alt='image' />");
         htmlStringBuilder.append("</body></center></html>");
 
-
         //write html string content to a file
         WriteToFile(htmlStringBuilder.toString(),"testfile.html");
+        System.out.println(duration+ " s");
+        System.out.println(dur);
+        System.out.println(end);
+
+
     } catch (IOException e) {
         e.printStackTrace();
     }
@@ -154,9 +183,6 @@ public class pur {
         writer.write(fileContent);
         writer.close();
 
-         //start time
-        long endTime;   //end time
-        double time;
 
     }
 
