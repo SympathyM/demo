@@ -52,7 +52,6 @@ public class pur {
 
     }
     @Test
-
     public void testHeaderFooterLinks () throws Exception
     {
 
@@ -93,10 +92,7 @@ public class pur {
         // a new addded
         driver.quit();
 
-
-
-
-      /*  long end  = System.currentTimeMillis();
+        /*  long end  = System.currentTimeMillis();
         double dur=(double) (end-start)/1000;
         int duration= (int) dur;
 
